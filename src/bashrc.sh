@@ -5,3 +5,4 @@ then
 fi
 
 alias fr-conjugueur="python2 -m fr.conjugueur"
+alias fr-gen-phrase="python2 -m fr.phrasesaleatoires"
