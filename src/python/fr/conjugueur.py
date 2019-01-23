@@ -28,6 +28,9 @@ def print_verbe(pronoun, verb):
 
 def get_verb_radical(pronoun, verb, mode, temps):
     # Regular verbs - Indicatif présent
+    if verb == "avoir":
+        return ""
+
     return verb[:-2]
 
 def get_verb_desinence(pronoun, verb, mode, temps):
@@ -35,14 +38,24 @@ def get_verb_desinence(pronoun, verb, mode, temps):
 
     if mode == 'indicatif':
         if temps == 'présent':
-            desinence['je'] = 'e'
-            desinence['tu'] = 'es'
-            desinence['il'] = 'e'
-            desinence['elle'] = 'e'
-            desinence['nous'] = 'ons'
-            desinence['vous'] = 'ez'
-            desinence['ils'] = 'ent'
-            desinence['elles'] = 'ent'
+            if verb == 'avoir':
+                desinence['je'] = 'ai'
+                desinence['tu'] = 'a'
+                desinence['il'] = 'a'
+                desinence['elle'] = 'a'
+                desinence['nous'] = 'avons'
+                desinence['vous'] = 'avez'
+                desinence['ils'] = 'ont'
+                desinence['elles'] = 'ont'
+            else:
+                desinence['je'] = 'e'
+                desinence['tu'] = 'es'
+                desinence['il'] = 'e'
+                desinence['elle'] = 'e'
+                desinence['nous'] = 'ons'
+                desinence['vous'] = 'ez'
+                desinence['ils'] = 'ent'
+                desinence['elles'] = 'ent'
 
     return desinence[pronoun.lower()]
 
