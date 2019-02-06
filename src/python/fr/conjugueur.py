@@ -45,6 +45,10 @@ def get_verb_radical(pronoun, verb, mode, temps):
             avoir_auxiliar = get_verb_desinence(pronoun, "avoir", "indicatif", "présent")
 
             return avoir_auxiliar + " " + get_participe(verb) + "%s"
+        elif temps == "plus-que-parfait":
+            avoir_auxiliar = get_verb_desinence(pronoun, "avoir", "indicatif", "imparfait")
+
+            return avoir_auxiliar + " " + get_participe(verb) + "%s"
         elif temps == "imparfait":
             return get_verb_radical("nous", verb, "indicatif", "présent")
 
@@ -75,19 +79,30 @@ def get_verb_desinence(pronoun, verb, mode, temps):
                 desinence['vous'] = 'ez'
                 desinence['ils'] = 'ent'
                 desinence['elles'] = 'ent'
-        elif temps == 'passé composé':
+        elif temps == 'passé composé' or \
+            temps == 'plus-que-parfait':
             return ""
         elif temps == "imparfait":
-            desinence['je'] = 'ais'
-            desinence['tu'] = 'ais'
-            desinence['il'] = 'ait'
-            desinence['elle'] = 'ait'
-            desinence['on'] = 'ait'
-            desinence['nous'] = 'aions'
-            desinence['vous'] = 'aiez'
-            desinence['ils'] = 'aient'
-            desinence['elles'] = 'aient'
-
+            if verb == 'avoir':
+                desinence['je'] = 'avais'
+                desinence['tu'] = 'avais'
+                desinence['il'] = 'avait'
+                desinence['elle'] = 'avait'
+                desinence['on'] = 'avait'
+                desinence['nous'] = 'avions'
+                desinence['vous'] = 'aviez'
+                desinence['ils'] = 'avaient'
+                desinence['elles'] = 'avaient'
+            else:
+                desinence['je'] = 'ais'
+                desinence['tu'] = 'ais'
+                desinence['il'] = 'ait'
+                desinence['elle'] = 'ait'
+                desinence['on'] = 'ait'
+                desinence['nous'] = 'aions'
+                desinence['vous'] = 'aiez'
+                desinence['ils'] = 'aient'
+                desinence['elles'] = 'aient'
 
     return desinence[pronoun.lower()]
 
@@ -98,7 +113,7 @@ def conjugueur(pronoun, verb, mode, temps):
     print_verbe(pronoun, verb_radical % (desinence_verbale))
 
 modes = ["indicatif"]
-temps = {"indicatif": ["présent", "passé composé", "imparfait"]}
+temps = {"indicatif": ["présent", "passé composé", "imparfait", "plus-que-parfait"]}
 
 for m in modes:
     print(m.capitalize())
