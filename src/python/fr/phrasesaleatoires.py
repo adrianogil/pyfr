@@ -9,9 +9,23 @@ fr_grammar = {
         "#des_nos_jours#",
         "#je_me_suis_tout_daccord#"
     ],
-    "je_me_suis_tout_daccord": ["Je suis tout à fait d'accord avec #chose_que_je_suis_daccord_avec#",
-                                "Je suis entièrement d'accord avec #chose_que_je_suis_daccord_avec#",
-                                "Je suis d'accord avec #chose_que_je_suis_daccord_avec#"],
+    "commence_pour_expliquer": [
+        "En effet",
+        "De fait",
+        "Par exemple",
+        "Cela dit que",
+        "Cependant",
+        "Pourtant",
+        "Néanmoins"
+    ],
+    "je_me_suis_tout_daccord": [
+        "#commence_pour_expliquer# je suis tout à fait d'accord avec #chose_que_je_suis_daccord_avec#",
+        "#commence_pour_expliquer# je suis entièrement d'accord avec #chose_que_je_suis_daccord_avec#",
+        "#commence_pour_expliquer# je suis d'accord avec #chose_que_je_suis_daccord_avec#",
+        "Je suis tout à fait d'accord avec #chose_que_je_suis_daccord_avec#",
+        "Je suis entièrement d'accord avec #chose_que_je_suis_daccord_avec#",
+        "Je suis d'accord avec #chose_que_je_suis_daccord_avec#"
+    ],
     "chose_que_je_suis_daccord_avec": ["la politique dingue du Brèsil"],
     "des_que_je_peux": ["#chose_je_fait_tout_les_temps# dès que je peux."],
     "chose_je_fait_tout_les_temps": [
