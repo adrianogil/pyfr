@@ -1,22 +1,12 @@
 import sys
 
 
-target_verb = sys.argv[1]
-
 pronouns = ['Je', "Tu", "Il", "Elle", "On", "Nous", "Vous", "Ils", "Elles"]
 
 
 def est_cest_voyelle(lettre):
     lettre = lettre.lower()
-    return lettre == 'a' or \
-           lettre ==  'á' or \
-           lettre ==  'à' or \
-           lettre ==  'e' or \
-           lettre ==  'é' or \
-           lettre ==  'è' or \
-           lettre ==  'i' or \
-           lettre ==  'o' or \
-           lettre ==  'u'
+    return lettre in ['a', 'á', 'à', 'e', 'é', 'è', 'i', 'o', 'u']
 
 
 def print_verbe(pronoun, verb):
@@ -26,11 +16,13 @@ def print_verbe(pronoun, verb):
     else:
         print(pronoun + " " + verb)
 
+
 def get_participe(verb):
     if verb == "avoir":
         return "eu"
 
     return verb[:-2] + "é"
+
 
 def get_verb_radical(pronoun, verb, mode, temps):
     # Regular verbs - Indicatif présent
@@ -54,6 +46,7 @@ def get_verb_radical(pronoun, verb, mode, temps):
 
     return ""
 
+
 def get_verb_desinence(pronoun, verb, mode, temps):
     desinence = {}
 
@@ -62,6 +55,16 @@ def get_verb_desinence(pronoun, verb, mode, temps):
             if verb == 'avoir':
                 desinence['je'] = 'ai'
                 desinence['tu'] = 'as'
+                desinence['il'] = 'a'
+                desinence['elle'] = 'a'
+                desinence['on'] = 'a'
+                desinence['nous'] = 'avons'
+                desinence['vous'] = 'avez'
+                desinence['ils'] = 'ont'
+                desinence['elles'] = 'ont'
+            elif verb == 'pouvoir':
+                desinence['je'] = 'peut'
+                desinence['tu'] = 'peut'
                 desinence['il'] = 'a'
                 desinence['elle'] = 'a'
                 desinence['on'] = 'a'
@@ -79,8 +82,7 @@ def get_verb_desinence(pronoun, verb, mode, temps):
                 desinence['vous'] = 'ez'
                 desinence['ils'] = 'ent'
                 desinence['elles'] = 'ent'
-        elif temps == 'passé composé' or \
-            temps == 'plus-que-parfait':
+        elif temps in ['passé composé', 'plus-que-parfait']:
             return ""
         elif temps == "imparfait":
             if verb == 'avoir':
@@ -112,13 +114,20 @@ def conjugueur(pronoun, verb, mode, temps):
     desinence_verbale = get_verb_desinence(pronoun.lower(), verb, mode, temps)
     print_verbe(pronoun, verb_radical % (desinence_verbale))
 
-modes = ["indicatif"]
-temps = {"indicatif": ["présent", "passé composé", "imparfait", "plus-que-parfait"]}
 
-for m in modes:
-    print(m.capitalize())
-    for t in temps[m]:
-        print(t.capitalize())
-        for p in pronouns:
-            conjugueur(p, target_verb, m, t)
-        print("")
+def conjuguer_verb(target_verb):
+    modes = ["indicatif"]
+    temps = {"indicatif": ["présent", "passé composé", "imparfait", "plus-que-parfait"]}
+
+    for m in modes:
+        print(m.capitalize())
+        for t in temps[m]:
+            print(t.capitalize())
+            for p in pronouns:
+                conjugueur(p, target_verb, m, t)
+            print("")
+
+
+if __name__ == '__main__':
+    target_verb = sys.argv[1]
+    conjuguer_verb(target_verb)
