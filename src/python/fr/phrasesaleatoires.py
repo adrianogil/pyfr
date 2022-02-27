@@ -9,15 +9,7 @@ fr_grammar = {
         "#des_nos_jours#",
         "#je_me_suis_tout_daccord#",
         "#exprimer_desaccord#",
-    ],
-    "commence_pour_expliquer": [
-        "En effet",
-        "De fait",
-        "Par exemple",
-        "Cela dit que",
-        "Cependant",
-        "Pourtant",
-        "Néanmoins"
+        "#je_voudrais#"
     ],
     "je_me_suis_tout_daccord": [
         "#commence_pour_expliquer# je suis tout à fait d'accord avec #chose_que_je_suis_daccord_avec#",
@@ -53,10 +45,25 @@ fr_grammar = {
         "Je vais au cinéma",
         "J'áchete #chose_a_acheter#"
     ],
+    "je_voudrais": [
+        "je voudrais #chose_a_acheter#, s'il vous plaît!"
+    ],
+    "commence_pour_expliquer": [
+        "En effet",
+        "De fait",
+        "Par exemple",
+        "Cela dit que",
+        "Cependant",
+        "Pourtant",
+        "Néanmoins"
+    ],
     "chose_a_acheter": [
         "une voiture",
         "un jouet",
-        "un ordinateur"
+        "un ordinateur",
+        "un jus d'orange",
+        "deux cafés",
+        "un croissant"
     ],
     "chose_a_tapporter": [
         "la bouillie",
