@@ -1,7 +1,11 @@
+import argparse
 import sys
 
 
 pronouns = ['Je', "Tu", "Il", "Elle", "On", "Nous", "Vous", "Ils", "Elles"]
+supported_modes_tenses = {
+    "indicatif": ["présent", "passé composé", "imparfait", "plus-que-parfait"],
+}
 
 
 def est_cest_voyelle(lettre):
@@ -9,12 +13,37 @@ def est_cest_voyelle(lettre):
     return lettre in ['a', 'á', 'à', 'e', 'é', 'è', 'i', 'o', 'u']
 
 
-def print_verbe(pronoun, verb):
+def format_verbe(pronoun, verb):
     if pronoun.lower() == "je" and est_cest_voyelle(verb[0]):
         pronoun = pronoun[:-1]
-        print(pronoun + "'" + verb)
+        return pronoun + "'" + verb
     else:
-        print(pronoun + " " + verb)
+        return pronoun + " " + verb
+
+
+def print_verbe(pronoun, verb):
+    print(format_verbe(pronoun, verb))
+
+
+def normalize_pronoun(pronoun):
+    for supported_pronoun in pronouns:
+        if pronoun.lower() == supported_pronoun.lower():
+            return supported_pronoun
+
+    raise ValueError("Unsupported pronoun: %s" % (pronoun,))
+
+
+def validate_conjugation_args(pronoun, verb, mode, temps):
+    normalize_pronoun(pronoun)
+
+    if verb is None or verb.strip() == "":
+        raise ValueError("Verb is required")
+
+    if mode not in supported_modes_tenses:
+        raise ValueError("Unsupported mode: %s" % (mode,))
+
+    if temps not in supported_modes_tenses[mode]:
+        raise ValueError("Unsupported tense for %s: %s" % (mode, temps))
 
 
 def get_participe(verb):
@@ -110,24 +139,81 @@ def get_verb_desinence(pronoun, verb, mode, temps):
 
 
 def conjugueur(pronoun, verb, mode, temps):
-    verb_radical = get_verb_radical(pronoun.lower(), verb, mode, temps)
-    desinence_verbale = get_verb_desinence(pronoun.lower(), verb, mode, temps)
-    print_verbe(pronoun, verb_radical % (desinence_verbale))
+    print(conjugate(pronoun, verb, mode, temps))
+
+
+def conjugate(pronoun, verb, mode="indicatif", temps="présent"):
+    validate_conjugation_args(pronoun, verb, mode, temps)
+    normalized_pronoun = normalize_pronoun(pronoun)
+    verb = verb.strip().lower()
+
+    verb_radical = get_verb_radical(normalized_pronoun.lower(), verb, mode, temps)
+    desinence_verbale = get_verb_desinence(normalized_pronoun.lower(), verb, mode, temps)
+    return format_verbe(normalized_pronoun, verb_radical % (desinence_verbale))
+
+
+def iter_conjugations(target_verb, mode=None, temps=None, pronoun=None):
+    modes = [mode] if mode else supported_modes_tenses.keys()
+
+    for current_mode in modes:
+        tenses = [temps] if temps else supported_modes_tenses[current_mode]
+        yield current_mode.capitalize()
+
+        for current_tense in tenses:
+            yield current_tense.capitalize()
+            current_pronouns = [normalize_pronoun(pronoun)] if pronoun else pronouns
+            for current_pronoun in current_pronouns:
+                yield conjugate(current_pronoun, target_verb, current_mode, current_tense)
+            yield ""
+
+
+def format_conjugations(target_verb, mode=None, temps=None, pronoun=None):
+    return "\n".join(iter_conjugations(target_verb, mode, temps, pronoun)).rstrip()
 
 
 def conjuguer_verb(target_verb):
-    modes = ["indicatif"]
-    temps = {"indicatif": ["présent", "passé composé", "imparfait", "plus-que-parfait"]}
+    print(format_conjugations(target_verb))
 
-    for m in modes:
-        print(m.capitalize())
-        for t in temps[m]:
-            print(t.capitalize())
-            for p in pronouns:
-                conjugueur(p, target_verb, m, t)
-            print("")
+
+def build_parser():
+    parser = argparse.ArgumentParser(description="Conjugate a French verb")
+    parser.add_argument("verb", help="verb to conjugate, for example: parler")
+    parser.add_argument(
+        "-m",
+        "--mode",
+        choices=sorted(supported_modes_tenses.keys()),
+        default="indicatif",
+        help="verb mode to use",
+    )
+    parser.add_argument(
+        "-t",
+        "--temps",
+        "--tense",
+        choices=sorted({tense for tenses in supported_modes_tenses.values() for tense in tenses}),
+        help="tense to print; defaults to all supported tenses",
+    )
+    parser.add_argument(
+        "-p",
+        "--pronoun",
+        help="pronoun to print; defaults to all supported pronouns",
+    )
+
+    return parser
+
+
+def main(argv=None):
+    parser = build_parser()
+    args = parser.parse_args(argv)
+
+    try:
+        output = format_conjugations(args.verb, args.mode, args.temps, args.pronoun)
+    except ValueError as exception:
+        parser.error(str(exception))
+        return 2
+
+    print(output)
+    return 0
 
 
 if __name__ == '__main__':
-    target_verb = sys.argv[1]
-    conjuguer_verb(target_verb)
+    sys.exit(main())
