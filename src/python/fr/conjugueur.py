@@ -6,6 +6,30 @@ pronouns = ['Je', "Tu", "Il", "Elle", "On", "Nous", "Vous", "Ils", "Elles"]
 supported_modes_tenses = {
     "indicatif": ["présent", "passé composé", "imparfait", "plus-que-parfait"],
 }
+irregular_present_forms = {
+    "être": {
+        "je": "suis",
+        "tu": "es",
+        "il": "est",
+        "elle": "est",
+        "on": "est",
+        "nous": "sommes",
+        "vous": "êtes",
+        "ils": "sont",
+        "elles": "sont",
+    },
+    "aller": {
+        "je": "vais",
+        "tu": "vas",
+        "il": "va",
+        "elle": "va",
+        "on": "va",
+        "nous": "allons",
+        "vous": "allez",
+        "ils": "vont",
+        "elles": "vont",
+    },
+}
 
 
 def est_cest_voyelle(lettre):
@@ -147,9 +171,22 @@ def conjugate(pronoun, verb, mode="indicatif", temps="présent"):
     normalized_pronoun = normalize_pronoun(pronoun)
     verb = verb.strip().lower()
 
+    irregular_form = get_irregular_form(normalized_pronoun.lower(), verb, mode, temps)
+    if irregular_form is not None:
+        return format_verbe(normalized_pronoun, irregular_form)
+
     verb_radical = get_verb_radical(normalized_pronoun.lower(), verb, mode, temps)
     desinence_verbale = get_verb_desinence(normalized_pronoun.lower(), verb, mode, temps)
     return format_verbe(normalized_pronoun, verb_radical % (desinence_verbale))
+
+
+def get_irregular_form(pronoun, verb, mode, temps):
+    if mode == "indicatif" and temps == "présent":
+        verb_forms = irregular_present_forms.get(verb)
+        if verb_forms is not None:
+            return verb_forms[pronoun]
+
+    return None
 
 
 def iter_conjugations(target_verb, mode=None, temps=None, pronoun=None):
