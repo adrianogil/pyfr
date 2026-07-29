@@ -3,28 +3,95 @@ import pytest
 from fr import conjugueur
 
 
-def test_conjugate_formats_elision_before_vowel():
-    assert conjugueur.conjugate("je", "aimer") == "J'aime"
+PRESENT_TENSE_TABLES = {
+    "parler": (
+        "Je parle",
+        "Tu parles",
+        "Il parle",
+        "Elle parle",
+        "On parle",
+        "Nous parlons",
+        "Vous parlez",
+        "Ils parlent",
+        "Elles parlent",
+    ),
+    "aimer": (
+        "J'aime",
+        "Tu aimes",
+        "Il aime",
+        "Elle aime",
+        "On aime",
+        "Nous aimons",
+        "Vous aimez",
+        "Ils aiment",
+        "Elles aiment",
+    ),
+    "manger": (
+        "Je mange",
+        "Tu manges",
+        "Il mange",
+        "Elle mange",
+        "On mange",
+        "Nous mangeons",
+        "Vous mangez",
+        "Ils mangent",
+        "Elles mangent",
+    ),
+    "avoir": (
+        "J'ai",
+        "Tu as",
+        "Il a",
+        "Elle a",
+        "On a",
+        "Nous avons",
+        "Vous avez",
+        "Ils ont",
+        "Elles ont",
+    ),
+    "être": (
+        "Je suis",
+        "Tu es",
+        "Il est",
+        "Elle est",
+        "On est",
+        "Nous sommes",
+        "Vous êtes",
+        "Ils sont",
+        "Elles sont",
+    ),
+    "aller": (
+        "Je vais",
+        "Tu vas",
+        "Il va",
+        "Elle va",
+        "On va",
+        "Nous allons",
+        "Vous allez",
+        "Ils vont",
+        "Elles vont",
+    ),
+    "pouvoir": (
+        "Je peux",
+        "Tu peux",
+        "Il peut",
+        "Elle peut",
+        "On peut",
+        "Nous pouvons",
+        "Vous pouvez",
+        "Ils peuvent",
+        "Elles peuvent",
+    ),
+}
 
 
-def test_conjugate_keeps_manger_e_for_nous_present():
-    assert conjugueur.conjugate("nous", "manger") == "Nous mangeons"
+@pytest.mark.parametrize("verb", PRESENT_TENSE_TABLES)
+def test_conjugate_supports_complete_present_tense_table(verb):
+    actual_forms = tuple(
+        conjugueur.conjugate(pronoun, verb)
+        for pronoun in conjugueur.pronouns
+    )
 
-
-def test_conjugate_supports_etre_present_irregular_forms():
-    assert conjugueur.conjugate("je", "être") == "Je suis"
-    assert conjugueur.conjugate("tu", "être") == "Tu es"
-    assert conjugueur.conjugate("nous", "être") == "Nous sommes"
-    assert conjugueur.conjugate("vous", "être") == "Vous êtes"
-    assert conjugueur.conjugate("ils", "être") == "Ils sont"
-
-
-def test_conjugate_supports_aller_present_irregular_forms():
-    assert conjugueur.conjugate("je", "aller") == "Je vais"
-    assert conjugueur.conjugate("tu", "aller") == "Tu vas"
-    assert conjugueur.conjugate("nous", "aller") == "Nous allons"
-    assert conjugueur.conjugate("vous", "aller") == "Vous allez"
-    assert conjugueur.conjugate("elles", "aller") == "Elles vont"
+    assert actual_forms == PRESENT_TENSE_TABLES[verb]
 
 
 def test_format_conjugations_can_filter_by_tense_and_pronoun():

@@ -83,6 +83,8 @@ def get_verb_radical(pronoun, verb, mode, temps):
         if temps == "présent":
             if verb == "avoir":
                 return "%s"
+            elif verb == "pouvoir":
+                return "%s"
             elif verb == "manger" and pronoun == "nous":
                 return "mange%s"
             return verb[:-2] + "%s"
@@ -116,15 +118,15 @@ def get_verb_desinence(pronoun, verb, mode, temps):
                 desinence['ils'] = 'ont'
                 desinence['elles'] = 'ont'
             elif verb == 'pouvoir':
-                desinence['je'] = 'peut'
-                desinence['tu'] = 'peut'
-                desinence['il'] = 'a'
-                desinence['elle'] = 'a'
-                desinence['on'] = 'a'
-                desinence['nous'] = 'avons'
-                desinence['vous'] = 'avez'
-                desinence['ils'] = 'ont'
-                desinence['elles'] = 'ont'
+                desinence['je'] = 'peux'
+                desinence['tu'] = 'peux'
+                desinence['il'] = 'peut'
+                desinence['elle'] = 'peut'
+                desinence['on'] = 'peut'
+                desinence['nous'] = 'pouvons'
+                desinence['vous'] = 'pouvez'
+                desinence['ils'] = 'peuvent'
+                desinence['elles'] = 'peuvent'
             else:
                 desinence['je'] = 'e'
                 desinence['tu'] = 'es'
