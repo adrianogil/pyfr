@@ -1,5 +1,7 @@
 from simplegrammar import SimpleGrammar
 
+from fr.vocabulaire import VERBES
+
 
 fr_grammar = {
     "text": ["#phrase_aleatoire#"],
@@ -9,8 +11,11 @@ fr_grammar = {
         "#des_nos_jours#",
         "#je_me_suis_tout_daccord#",
         "#exprimer_desaccord#",
-        "#je_voudrais#"
+        "#je_voudrais#",
+        "#verbe_du_jour#",
     ],
+    "verbe_du_jour": ["Le verbe du jour est « #verbe_vocabulaire# »."],
+    "verbe_vocabulaire": list(VERBES),
     "je_me_suis_tout_daccord": [
         "#commence_pour_expliquer# je suis tout à fait d'accord avec #chose_que_je_suis_daccord_avec#",
         "#commence_pour_expliquer# je suis entièrement d'accord avec #chose_que_je_suis_daccord_avec#",
