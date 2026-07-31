@@ -84,6 +84,10 @@ PRESENT_TENSE_TABLES = {
 }
 
 
+def test_supported_verbs_match_locked_present_tense_tables():
+    assert set(conjugueur.supported_verbs) == set(PRESENT_TENSE_TABLES)
+
+
 @pytest.mark.parametrize("verb", PRESENT_TENSE_TABLES)
 def test_conjugate_supports_complete_present_tense_table(verb):
     actual_forms = tuple(
@@ -122,3 +126,16 @@ def test_main_rejects_unsupported_pronoun(capsys):
 
     assert exception.value.code == 2
     assert "Unsupported pronoun: moi" in capsys.readouterr().err
+
+
+def test_conjugate_rejects_unsupported_verb():
+    with pytest.raises(ValueError, match="Unsupported verb: finir"):
+        conjugueur.conjugate("je", "finir")
+
+
+def test_main_rejects_unsupported_verb(capsys):
+    with pytest.raises(SystemExit) as exception:
+        conjugueur.main(["finir", "--temps", "présent"])
+
+    assert exception.value.code == 2
+    assert "Unsupported verb: finir" in capsys.readouterr().err

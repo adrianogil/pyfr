@@ -3,6 +3,15 @@ import sys
 
 
 pronouns = ['Je', "Tu", "Il", "Elle", "On", "Nous", "Vous", "Ils", "Elles"]
+supported_verbs = (
+    "aimer",
+    "aller",
+    "avoir",
+    "manger",
+    "parler",
+    "pouvoir",
+    "être",
+)
 supported_modes_tenses = {
     "indicatif": ["présent", "passé composé", "imparfait", "plus-que-parfait"],
 }
@@ -57,11 +66,20 @@ def normalize_pronoun(pronoun):
     raise ValueError("Unsupported pronoun: %s" % (pronoun,))
 
 
-def validate_conjugation_args(pronoun, verb, mode, temps):
-    normalize_pronoun(pronoun)
-
+def normalize_verb(verb):
     if verb is None or verb.strip() == "":
         raise ValueError("Verb is required")
+
+    normalized_verb = verb.strip().lower()
+    if normalized_verb not in supported_verbs:
+        raise ValueError("Unsupported verb: %s" % (normalized_verb,))
+
+    return normalized_verb
+
+
+def validate_conjugation_args(pronoun, verb, mode, temps):
+    normalize_pronoun(pronoun)
+    normalize_verb(verb)
 
     if mode not in supported_modes_tenses:
         raise ValueError("Unsupported mode: %s" % (mode,))
@@ -171,7 +189,7 @@ def conjugueur(pronoun, verb, mode, temps):
 def conjugate(pronoun, verb, mode="indicatif", temps="présent"):
     validate_conjugation_args(pronoun, verb, mode, temps)
     normalized_pronoun = normalize_pronoun(pronoun)
-    verb = verb.strip().lower()
+    verb = normalize_verb(verb)
 
     irregular_form = get_irregular_form(normalized_pronoun.lower(), verb, mode, temps)
     if irregular_form is not None:
@@ -216,7 +234,10 @@ def conjuguer_verb(target_verb):
 
 def build_parser():
     parser = argparse.ArgumentParser(description="Conjugate a French verb")
-    parser.add_argument("verb", help="verb to conjugate, for example: parler")
+    parser.add_argument(
+        "verb",
+        help="supported verb to conjugate: %s" % (", ".join(supported_verbs),),
+    )
     parser.add_argument(
         "-m",
         "--mode",
