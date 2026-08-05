@@ -6,3 +6,4 @@ fi
 
 alias fr-conjugueur="python3 -m fr.conjugueur"
 alias fr-gen-phrase="python3 -m fr.phrasesaleatoires"
+alias fr-negation="python3 -m fr.negation"
